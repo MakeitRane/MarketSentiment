@@ -61,7 +61,7 @@ stemmer = PorterStemmer()
 sent_int_anal = SentimentIntensityAnalyzer()
 
 #prints scores for sentiment analysis
-print(sent_int_anal.polarity_scores("$BTC touched $30000 for the first time since April. We are so back. TO THE MOON."))
+print(sent_int_anal.polarity_scores("$BTC touched $35000 for the first time since April. We are so back. TO THE MOON."))
 #Why I believe $BTC will reach between $100K - $200K and $ETH $16K - $34K in the next bull run.
 #print(sent_int_anal.score_valence)
 #print(sent_int_anal.print_valence())
