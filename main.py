@@ -1,10 +1,10 @@
 import requests
 import nltk
 import pandas as pd
-from web_scraper import twitter_data
-from packages_test import sent_analysis
+from web_scraper import WebScraper
+#from packages_test import sent_analysis
 
-def main():
+"""def main():
     coin_name = input("Want the market sentiment for a particular cryptocurrency? Type its ticker here: ")
     pos_tweets = [] #positive tweets
     neg_tweets = [] #negative tweets
@@ -37,6 +37,10 @@ def main():
 
     #to do: give final score between 0-10
     #idea: get average positive, negative, and neutral, whichever is highest multiply by 10 and that's the sentiment?
+"""
+
+webscraper = WebScraper()
+test = webscraper.scrape_data('$BTC')
 
         
 
