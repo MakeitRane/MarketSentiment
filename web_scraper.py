@@ -1,24 +1,31 @@
-import requests
+import tweepy 
 import pandas as pd
 
-class WebScraper:
-    def retrieve_data(self, data): 
-            all_tweets = data['tweet_id']
-            for tweet in all_tweets:
-                data.append({'ID': tweet['tweet_id'],'User': tweet["user"],'Tweet': tweet["text"],'URL': tweet["link"]})
-            df = pd.DataFrame(data)
-            df.to_json('scraped_tweets.json', orient='index')
-            return df
-    def scrape_data (self, user_input):
-        twitter_data = []
-        #print("hi")
-        payload = {'api_key':'77dd07486d8909f02d4145c881e49f75', 'query': user_input, 'num': '1', 'time_period':'1D'}
-        response = requests.get('https://api.scraperapi.com/structured/twitter/search', params=payload)
-        #print(response.content)
-        #output = self.retrieve_data(response)
-        #data = output.json()
-        #print(data)
-        return "hii"
 
-     
-    
+API_KEY = ''
+SECRET_API = ''
+BEARER_TOK = ''
+ACCESS_TOKEN = ''
+ACCESS_TOKEN_SECRET = ''
+
+def scrape_tweets(keyword, tweet_count):
+    client = tweepy.Client(BEARER_TOK)
+
+    keyword_two = ' -has:media -is:retweet'
+    keyword_final = keyword + keyword_two 
+    response = client.search_recent_tweets(query = keyword_final, max_results = tweet_count)
+
+    if response.data:
+        attribute_container = []
+        for tweet in response.data:
+            tweet_id = tweet.id
+            text = tweet.text
+            
+            attribute_container.append([tweet_id, text])
+    else:
+        attribute_container = []
+
+    columns = ["Tweet ID", "Tweet Text"]
+    df_tweet = pd.DataFrame(attribute_container, columns=columns)
+
+    return df_tweet
