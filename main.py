@@ -1,52 +1,41 @@
 import requests
 import nltk
 import pandas as pd
-from web_scraper import WebScraper
-#from nltk_test import sent_analysis
-from nltk_test import final_score
-from nltk_test import Preprocessing
-
+from web_scraper import scrape_tweets
+from packages_test import Preprocessing
+from statistics import mean
 
 def main():
     coin_name = input("Want the market sentiment for a particular cryptocurrency? Type its ticker here: ")
-    pos_tweets = [] #positive tweets
-    neg_tweets = [] #negative tweets
-    neu_tweets = [] #neutral tweets
+    tweet_count = int(input("How many tweets do you want to analyze? Make sure your number is at least 10: "))
+    pos_scores = [] #positive scores
+    neg_scores = [] #negative scores
+    neu_scores = [] #neutral scores
 
-    #put coin name/ticker into twitter api search
-    webscraper = WebScraper()
-    tweets = webscraper.scrape_data(coin_name)
+    tweets = scrape_tweets(coin_name, tweet_count)
 
-    #while loop to process each tweet
-    #curr_tweet_num = 0
-
-    #gets compound score and organizes it accordingly
-    preprocessing = Preprocessing(tweets)
-    for tweet in tweets:#
-        score = preprocessing.sent_analysis(tweet)
+    for tweet in tweets["Tweet Text"]:
+        score = Preprocessing.sent_analysis(tweet)
         if score == 0:
-            neu_tweets.append(tweet)
+            neu_scores.append(score)
         elif score > 0:
-            pos_tweets.append([tweet, score])
+            pos_scores.append(score)
         else:
-            neg_tweets.append([tweet, score])
+            neg_scores.append(score)
 
-    #number of positive, negative, and neutral tweets. can be used for further analysis or extra metrics
-    num_pos_tweets = len(pos_tweets)
-    num_neg_tweets = len(neg_tweets)
-    num_neu_tweets = len(neu_tweets)
+    num_pos_scores = len(pos_scores)
+    num_neg_scores = len(neg_scores)
+    num_neu_scores = len(neu_scores)
 
-    
+    avg_pos_scores = mean(pos_scores) if num_pos_scores > 0 else 0
+    avg_neg_scores = mean(neg_scores) if num_neg_scores > 0 else 0
+    avg_neu_scores = mean(neu_scores) if num_neu_scores > 0 else 0
 
-    #give final score between 0-10
-    pos_score = final_score(pos_tweets, num_pos_tweets)
-    neg_score = final_score(neg_tweets, num_neg_tweets)
-    neu_score = final_score(neu_tweets, num_neu_tweets)
+    final_score = max(avg_pos_scores, avg_neg_scores, avg_neu_scores) * 10
 
-    final_score = 10*(pos_score+neg_score+neu_score)/3
-    return final_score
-    #idea: get average positive, negative, and neutral, whichever is highest multiply by 10 and that's the sentiment?
+    print("Final Sentiment Score: ", final_score)
 
 
-
+        
+main()
     
