@@ -109,36 +109,39 @@ crypto_slang = {
 
 class Preprocessing:
     def sent_analysis(tweet) -> float:
-        #Tokenize the words, so you can break up the entire tweet into a list of words
+        # Tokenize the words, so you can break up the entire tweet into a list of words
         words_tokenized = word_tokenize(tweet.lower())
 
-        #Set the stop words to filter out of tweet
+        # Set the stop words to filter out of tweet
         stop_words = set(stopwords.words('english'))
 
         without_stop_words = []
-        #Loop to create a list without stop words
+        # Loop to create a list without stop words
         for word in words_tokenized:
             if word not in stop_words:
                 without_stop_words.append(word)
 
-        #lemmatizer = WordNetLemmatizer() 
-        #create stemmer object from PorterStemmer class
+        # create stemmer object from PorterStemmer class
         stemmer = PorterStemmer()
 
         stemmed_words =[]
-        #stem words and then append to new list
+        # stem words and then append to new list
         for word in without_stop_words:
             stemmed_words.append(stemmer.stem(word)) 
 
-        #Instatiate class for SentimentIntensityAnalyzer
+        # Rejoin stemmed words
+        stemmed_text = ' '.join(stemmed_words)
+
+        # Instantiate class for SentimentIntensityAnalyzer
         sent_int_anal = SentimentIntensityAnalyzer()
 
-        #update the crypto slang to the vader list
+        # update the crypto slang to the vader list
         sent_int_anal.lexicon.update(crypto_slang)
 
-        #find the polarity score of the words
-        scores = sent_int_anal.polarity_scores(stemmed_words)["compound"]
+        # find the polarity score of the words
+        scores = sent_int_anal.polarity_scores(stemmed_text)["compound"]
         return scores
+
 
 def final_score(score_list, count):
     score = 0
