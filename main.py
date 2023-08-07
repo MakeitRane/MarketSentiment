@@ -2,23 +2,28 @@ import requests
 import nltk
 import pandas as pd
 from web_scraper import WebScraper
-#from packages_test import sent_analysis
+#from nltk_test import sent_analysis
+from nltk_test import final_score
+from nltk_test import Preprocessing
 
-"""def main():
+
+def main():
     coin_name = input("Want the market sentiment for a particular cryptocurrency? Type its ticker here: ")
     pos_tweets = [] #positive tweets
     neg_tweets = [] #negative tweets
     neu_tweets = [] #neutral tweets
 
     #put coin name/ticker into twitter api search
-    tweets = extract_twitter_data()
+    webscraper = WebScraper()
+    tweets = webscraper.scrape_data(coin_name)
 
     #while loop to process each tweet
     #curr_tweet_num = 0
 
     #gets compound score and organizes it accordingly
-    for tweet in tweets:
-        score = sent_analysis(tweet)
+    preprocessing = Preprocessing(tweets)
+    for tweet in tweets:#
+        score = preprocessing.sent_analysis(tweet)
         if score == 0:
             neu_tweets.append(tweet)
         elif score > 0:
@@ -33,13 +38,15 @@ from web_scraper import WebScraper
 
     
 
-    #to do: give final score between 0-10
+    #give final score between 0-10
+    pos_score = final_score(pos_tweets, num_pos_tweets)
+    neg_score = final_score(neg_tweets, num_neg_tweets)
+    neu_score = final_score(neu_tweets, num_neu_tweets)
+
+    final_score = 10*(pos_score+neg_score+neu_score)/3
+    return final_score
     #idea: get average positive, negative, and neutral, whichever is highest multiply by 10 and that's the sentiment?
-"""
 
-webscraper = WebScraper()
-test = webscraper.scrape_data('$BTC')
 
-        
-main()
+
     
