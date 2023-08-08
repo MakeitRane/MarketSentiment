@@ -29,3 +29,4 @@ def scrape_tweets(keyword, tweet_count):
     df_tweet = pd.DataFrame(attribute_container, columns=columns)
 
     return df_tweet
+
